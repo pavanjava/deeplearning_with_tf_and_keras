@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 
-class DensePerceptron:
+class SimplePerceptron:
     def __init__(self):
         self.NB_CLASSES = 10
         self.RESHAPED = 28 * 28
@@ -51,7 +51,7 @@ class DensePerceptron:
 
 
 if __name__ == "__main__":
-    obj = DensePerceptron()
+    obj = SimplePerceptron()
     obj.preprocess()
     obj.create_model()
     obj.fit()
