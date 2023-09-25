@@ -14,6 +14,7 @@ class SimplePerceptron:
         self.y_train = None
         self.y_test = None
         self.model = None
+        self.verbose = 0
 
     def preprocess(self):
         (self.x_train, self.y_train), (self.x_test, self.y_test) = keras.datasets.mnist.load_data()
@@ -56,7 +57,7 @@ class SimplePerceptron:
         print(self.model.summary())
 
     def fit(self):
-        self.model.fit(self.x_train, self.y_train, batch_size=self.BATCH_SIZE, epochs=self.EPOCHS, validation_split=0.2)
+        self.model.fit(self.x_train, self.y_train, batch_size=self.BATCH_SIZE, epochs=self.EPOCHS, validation_split=0.2, verbose=self.verbose)
 
     def evaluate(self):
         test_loss, test_acc = self.model.evaluate(self.x_test, self.y_test)
