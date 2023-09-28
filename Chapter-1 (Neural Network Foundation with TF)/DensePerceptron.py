@@ -5,7 +5,7 @@ from tensorflow import keras
 class SimplePerceptron:
     def __init__(self):
         self.NB_CLASSES = 10
-        self.N_HIDDEN = 128
+        self.N_HIDDEN = 30
         self.RESHAPED = 28 * 28
         self.EPOCHS = 50
         self.BATCH_SIZE = 128
@@ -14,7 +14,8 @@ class SimplePerceptron:
         self.y_train = None
         self.y_test = None
         self.model = None
-        self.verbose = 0
+        self.verbose = 1
+        self.DROPOUT = 0.3
 
     def preprocess(self):
         (self.x_train, self.y_train), (self.x_test, self.y_test) = keras.datasets.mnist.load_data()
@@ -42,17 +43,16 @@ class SimplePerceptron:
     loss can take any value from ["mse", "binary_crossentropy", "categorical_crossentropy"]. the default being
     "categorical_crossentropy"
     '''
-    def create_model(self, kernel_initializer="zeros", end_layer_activation="softmax", optimizer="adam", loss="categorical_crossentropy"):
+    def create_model(self, end_layer_activation="softmax", optimizer="adam", loss="categorical_crossentropy"):
         self.model = tf.keras.models.Sequential()
-        self.model.add(keras.layers.Dense(self.N_HIDDEN/2, input_shape=(self.RESHAPED,),
-                                          kernel_initializer=kernel_initializer, name="dense_layer_1",
-                                          activation='softmax'))
         self.model.add(keras.layers.Dense(self.N_HIDDEN, input_shape=(self.RESHAPED,),
-                                          kernel_initializer=kernel_initializer, name="dense_layer_2",
-                                          activation='softmax'))
+                                          name="dense_layer_1", activation='relu'))
+        self.model.add(keras.layers.Dropout(self.DROPOUT))
+        self.model.add(keras.layers.Dense(self.N_HIDDEN, input_shape=(self.RESHAPED,),
+                                           name="dense_layer_2",activation='relu'))
+        self.model.add(keras.layers.Dropout(self.DROPOUT))
         self.model.add(keras.layers.Dense(self.NB_CLASSES, input_shape=(self.RESHAPED,),
-                                          kernel_initializer=kernel_initializer, name="dense_layer_3",
-                                          activation=end_layer_activation))
+                                          name="dense_layer_3", activation=end_layer_activation))
         self.model.compile(optimizer=optimizer, loss=loss, metrics=["accuracy"])
         print(self.model.summary())
 
